@@ -5,10 +5,102 @@
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Handpan patterns</title>
+
+    <link rel="stylesheet" type="text/css" href="assets/bootstrap.min.css">
 </head>
 <body>
 
+<div class="container">
+
+    <form action="#">
+
+        <fieldset class="form-group">
+            <label for="handpan_notes">Number of notes on your handpan (including the ding):</label>
+            <input type="range" id="handpan_notes" class="custom-range" min="9" max="17" step="1" value="9">
+            <div>
+                Current:
+                <strong id="handpan_notes_result">9</strong>
+            </div>
+        </fieldset>
+
+        <fieldset class="form-group">
+            <p>Number of notes in your pattern:</p>
+
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="pattern_notes_4" class="custom-control-input" name="pattern_notes" value="4">
+                <label class="custom-control-label" for="pattern_notes_4">4</label>
+            </div>
+
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="pattern_notes_8" class="custom-control-input" name="pattern_notes" value="8">
+                <label class="custom-control-label" for="pattern_notes_8">8</label>
+            </div>
+
+            <div class="custom-control custom-radio custom-control-inline">
+                <input type="radio" id="pattern_notes_16" class="custom-control-input" name="pattern_notes" value="16">
+                <label class="custom-control-label" for="pattern_notes_16">16</label>
+            </div>
+        </fieldset>
+    </form>
+
+    <div id="pattern"></div>
+</div>
+
+<script type="application/javascript" src="assets/jquery-3.3.1.slim.min.js"></script>
+<script type="application/javascript" src="assets/popper.min.js"></script>
+<script type="application/javascript" src="assets/bootstrap.min.js"></script>
+
 <script type="application/javascript">
+
+    (function () {
+
+        /**
+         * Globals that are used in setup() & update()
+         */
+        let handpan_notes_input = document.getElementById('handpan_notes');
+        let handpan_notes_result_element = document.getElementById('handpan_notes_result');
+        let patterns_container = document.getElementById('pattern');
+
+        function setup() {
+            handpan_notes_result_element.value = 9;
+            document.querySelector('input[name="pattern_notes"]').checked = true;
+
+            handpan_notes_input.addEventListener('input', update);
+        }
+
+        /**
+         * @param event Event
+         */
+        function update(event) {
+            let handpan_notes = handpan_notes_input.value;
+
+            handpan_notes_result_element.innerText = handpan_notes;
+
+            patterns_container.innerText = '';
+
+            for (var i = 0; i < handpan_notes; i++) {
+                let item = createPatternItem();
+
+                patterns_container.appendChild(item);
+            }
+        }
+
+        function createPatternItem() {
+            let element = document.createElement('div');
+            element.className = 'pattern_item';
+
+            let items = ['1', '2', '3', '4', '5'];
+
+            element.innerText = items[Math.floor(Math.random()*items.length)];
+
+            return element;
+        }
+
+        setup();
+        update();
+
+    })();
+
 </script>
 
 </body>
