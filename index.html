@@ -7,6 +7,68 @@
     <title>Handpan patterns</title>
 
     <link rel="stylesheet" type="text/css" href="assets/bootstrap.min.css">
+    <style type="text/css">
+        body {
+            background-color: #292929;
+            color: #ddd;
+        }
+        #pattern .pattern_item {
+            position: relative;
+            height: 100px;
+            display: inline-block;
+        }
+
+        /* Handpan hit type text */
+        #pattern .pattern_item .inner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: solid 2px #aaa;
+            text-align: center;
+            line-height: 46px;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        /* Notes list */
+        #pattern .pattern_item .notes {
+            position: absolute;
+            text-align: center;
+            width: 50px;
+            margin: 0 15px;
+            line-height: 9pt;
+            font-size: 9pt;
+        }
+
+        /* Lines between each pattern element */
+        #pattern .pattern_item:not(:last-of-type)::after,
+        #pattern .pattern_item:not(:first-of-type)::before,
+        #pattern .pattern_item:first-of-type::before,
+        #pattern .pattern_item:last-of-type::after
+        {
+            content: "";
+            display: inline-block;
+        }
+        #pattern .pattern_item:not(:last-of-type)::after,
+        #pattern .pattern_item:not(:first-of-type)::before
+        {
+            width: 15px;
+            margin-top: -15px;
+            border-bottom: solid 1px #ddd;
+            top: -25px;
+            position: relative;
+        }
+        #pattern .pattern_item:first-of-type::before
+        {
+            margin-left: 15px;
+        }
+        #pattern .pattern_item:last-of-type::after
+        {
+            margin-right: 15px;
+        }
+    </style>
 </head>
 <body>
 
@@ -15,11 +77,15 @@
     <form action="#">
 
         <fieldset class="form-group">
-            <label for="handpan_notes">Number of notes on your handpan (including the ding):</label>
-            <input type="range" id="handpan_notes" class="custom-range" min="9" max="17" step="1" value="9">
-            <div>
-                Current:
-                <strong id="handpan_notes_result">9</strong>
+            <div class="row">
+                <div class="col-sm-5">
+                    <label for="handpan_notes">Number of notes on your handpan (including the ding):</label>
+                    <input type="range" id="handpan_notes" class="custom-range" min="9" max="17" step="1" value="9">
+                    <div>
+                        Current:
+                        <strong id="handpan_notes_result">9</strong>
+                    </div>
+                </div>
             </div>
         </fieldset>
 
@@ -41,6 +107,12 @@
                 <label class="custom-control-label" for="pattern_notes_16">16</label>
             </div>
         </fieldset>
+
+        <fieldset class="form-group">
+            <button type="button" id="regenerate_button" class="btn btn-primary">
+                Regenerate
+            </button>
+        </fieldset>
     </form>
 
     <div id="pattern"></div>
@@ -57,13 +129,55 @@
         /**
          * Globals that are used in setup() & update()
          */
-        let handpan_notes_input = document.getElementById('handpan_notes');
-        let handpan_notes_result_element = document.getElementById('handpan_notes_result');
-        let patterns_container = document.getElementById('pattern');
+        const handpan_notes_input = document.getElementById('handpan_notes');
+        const handpan_notes_result_element = document.getElementById('handpan_notes_result');
+        const patterns_container = document.getElementById('pattern');
+        const number_of_notes_list = document.querySelectorAll('input[name="pattern_notes"]');
+
+        // Reminder of the common chromatic scale in C:
+        // C -> C♯ -> D♭ -> D -> D♯ -> E♭ -> E -> E♯/F♭ -> F -> F♯ -> G♭ -> G -> G♯ -> A♭ -> A -> A♯ -> B♭ -> B -> B♯/C♭ -> C
+        const handpan_notes = [
+            // 0 => ding
+            // 1 => note at the bottom of the handpan
+            {"note": "C", "alter": "#", "octave": 3, "position": 0},
+            {"note": "G", "alter": "#", "octave": 3, "position": 1},
+            {"note": "A", "alter": "",  "octave": 4, "position": 2},
+            {"note": "B", "alter": "",  "octave": 4, "position": 3},
+            {"note": "C", "alter": "#", "octave": 4, "position": 4},
+            {"note": "D", "alter": "#", "octave": 4, "position": 5},
+            {"note": "E", "alter": "",  "octave": 4, "position": 6},
+            {"note": "F", "alter": "#", "octave": 4, "position": 7},
+            {"note": "G", "alter": "#", "octave": 4, "position": 8},
+        ];
+
+        const handpan_hits = [
+            {"type": 'ding',       "needs_notes": 0},
+            {"type": 'slam',       "needs_notes": 0},
+            {"type": 'left_slam',  "needs_notes": 0},
+            {"type": 'right_slam', "needs_notes": 0},
+            {"type": 'ghost',      "needs_notes": 0},
+            {"type": 'punch',      "needs_notes": 0},
+            {"type": 'any_note',   "needs_notes": 0},
+            {"type": 'note',       "needs_notes": 1},
+            {"type": 'double',     "needs_notes": 2}, // "power" chord
+            {"type": 'triple',     "needs_notes": 3}, // chord
+            {"type": 'harmonic',   "needs_notes": 1},
+        ];
+
+        // Will help choose random elements from hits or notes
+        Array.prototype.randomElement = function () {
+            return this[Math.floor(Math.random() * this.length)]
+        };
 
         function setup() {
             handpan_notes_result_element.value = 9;
-            document.querySelector('input[name="pattern_notes"]').checked = true;
+
+            number_of_notes_list[2].checked = true;
+            for (let pattern_note of number_of_notes_list) {
+                pattern_note.addEventListener('change', update);
+            }
+
+            document.getElementById('regenerate_button').addEventListener('click', update);
 
             handpan_notes_input.addEventListener('input', update);
         }
@@ -72,13 +186,14 @@
          * @param event Event
          */
         function update(event) {
-            let handpan_notes = handpan_notes_input.value;
+            const handpan_notes = handpan_notes_input.value;
+            const number_of_notes_in_pattern = getRadioButtonValue(number_of_notes_list);
 
             handpan_notes_result_element.innerText = handpan_notes;
 
             patterns_container.innerText = '';
 
-            for (var i = 0; i < handpan_notes; i++) {
+            for (let i = 0; i < number_of_notes_in_pattern; i++) {
                 let item = createPatternItem();
 
                 patterns_container.appendChild(item);
@@ -86,14 +201,48 @@
         }
 
         function createPatternItem() {
-            let element = document.createElement('div');
-            element.className = 'pattern_item';
+            const pattern_item = document.createElement('div');
+            pattern_item.className = 'pattern_item';
 
-            let items = ['1', '2', '3', '4', '5'];
+            // Choose a "hit" type randomly in the list
+            const handpan_hit = handpan_hits.randomElement();
 
-            element.innerText = items[Math.floor(Math.random()*items.length)];
+            // Display handpan hit type
+            const text_element = document.createElement('span');
+            text_element.className = 'inner';
+            text_element.innerText = handpan_hit.type;
+            pattern_item.appendChild(text_element);
 
-            return element;
+            // Handle potential notes to display if necessary
+            if (handpan_hit.needs_notes) {
+                const notes_element = document.createElement('div');
+                notes_element.className = 'notes';
+
+                // Choose as many random note in the list so we can display them as a helper
+                const notes = [];
+
+                for (let i = 0; i < handpan_hit.needs_notes; i++) {
+                    // Pick a random note
+                    const note = handpan_notes.randomElement();
+                    notes.push(note.note + note.alter + note.octave);
+                }
+
+                notes_element.innerHTML = notes.join('<br>');
+
+                pattern_item.appendChild(notes_element);
+            }
+
+            return pattern_item;
+        }
+
+        function getRadioButtonValue(radios_list) {
+            for (let item of radios_list) {
+                if (item.checked) {
+                    return item.value;
+                }
+            }
+
+            return null;
         }
 
         setup();
