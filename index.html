@@ -48,25 +48,29 @@
         #pattern .pattern_item:first-of-type::before,
         #pattern .pattern_item:last-of-type::after
         {
-            content: "";
+            content: "—";
+            color: #ddd;
             display: inline-block;
-        }
-        #pattern .pattern_item:not(:last-of-type)::after,
-        #pattern .pattern_item:not(:first-of-type)::before
-        {
             width: 15px;
             margin-top: -15px;
-            border-bottom: solid 1px #ddd;
-            top: -25px;
+            top: -20px;
             position: relative;
         }
-        #pattern .pattern_item:first-of-type::before
-        {
-            margin-left: 15px;
+        #pattern .pattern_item:first-of-type::before,
+        #pattern .pattern_item:last-of-type::after {
+            content: "";
         }
-        #pattern .pattern_item:last-of-type::after
-        {
-            margin-right: 15px;
+
+        .pattern_time_separator {
+            display: inline-block;
+            position: relative;
+            top: -18px;
+            width: 12px;
+            height: 12px;
+            background: #aaa;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            border-radius: 50%;
         }
     </style>
 </head>
@@ -85,6 +89,7 @@
                         Current:
                         <strong id="handpan_notes_result">9</strong>
                     </div>
+                    (this option is not used for now, but will be in the future)
                 </div>
             </div>
         </fieldset>
@@ -136,9 +141,13 @@
 
         // Reminder of the common chromatic scale in C:
         // C -> C♯ -> D♭ -> D -> D♯ -> E♭ -> E -> E♯/F♭ -> F -> F♯ -> G♭ -> G -> G♯ -> A♭ -> A -> A♯ -> B♭ -> B -> B♯/C♭ -> C
+
+        // Note: the "position" attribute is not used for now, but will be in the future when people will customize their handpan
+
         const handpan_notes = [
+            // <0 => low notes below the handpan
             // 0 => ding
-            // 1 => note at the bottom of the handpan
+            // 1 => lowest note on the top-part of the handpan
             {"note": "C", "alter": "#", "octave": 3, "position": 0},
             {"note": "G", "alter": "#", "octave": 3, "position": 1},
             {"note": "A", "alter": "",  "octave": 4, "position": 2},
@@ -197,6 +206,11 @@
                 let item = createPatternItem();
 
                 patterns_container.appendChild(item);
+                if (i && (i + 1) % 4 === 0 && (i + 1) < number_of_notes_in_pattern) {
+                    const pattern_item_separator = document.createElement('span');
+                    pattern_item_separator.className = 'pattern_time_separator';
+                    patterns_container.appendChild(pattern_item_separator);
+                }
             }
         }
 
