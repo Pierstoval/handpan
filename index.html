@@ -7,7 +7,7 @@
     <title>Handpan patterns</title>
 
     <link rel="stylesheet" type="text/css" href="assets/bootstrap.min.css">
-    <style type="text/css">
+    <style>
         body {
             background-color: #292929;
             color: #ddd;
@@ -128,11 +128,11 @@
     <div id="pattern"></div>
 </div>
 
-<script type="application/javascript" src="assets/jquery-3.3.1.slim.min.js"></script>
-<script type="application/javascript" src="assets/popper.min.js"></script>
-<script type="application/javascript" src="assets/bootstrap.min.js"></script>
+<script src="assets/jquery-3.3.1.slim.min.js"></script>
+<script src="assets/popper.min.js"></script>
+<script src="assets/bootstrap.min.js"></script>
 
-<script type="application/javascript">
+<script>
 
     (function () {
 
@@ -175,6 +175,9 @@
             {"type": 'note',       "needs_notes": 1},
             {"type": 'double',     "needs_notes": 2}, // "power" chord
             {"type": 'triple',     "needs_notes": 3}, // chord
+            {"type": 'staccato',   "needs_notes": 1}, // A note that you just "mute" with the side of the other hand
+            {"type": 'brush_up',   "needs_notes": 2}, // 2 Notes you chain really fast in the specified duration
+            {"type": 'brush_down', "needs_notes": 2}, // 2 Notes you chain really fast in the specified duration
             {"type": 'harmonic',   "needs_notes": 1},
         ];
 
