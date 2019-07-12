@@ -12,25 +12,40 @@
             background-color: #292929;
             color: #ddd;
         }
-        #pattern {
-            max-width: 665px;
+        #pattern,
+        #pattern[data-rhythm="4"],
+        #pattern[data-rhythm="8"] {
+            max-width: 670px;
+        }
+        #pattern[data-rhythm="3"] {
+            max-width: 510px;
         }
 
-        #pattern .pattern_item {
+        .pattern_item {
             position: relative;
             height: 100px;
             display: inline-block;
         }
 
+        .pattern_item.hand-left .inner {
+            border-color: blue;
+        }
+        .pattern_item.hand-right .inner {
+            border-color: red;
+        }
+
         /* Handpan hit type text */
-        #pattern .pattern_item .inner {
+        .pattern_item .inner {
             display: inline-block;
             width: 50px;
             height: 50px;
-            border: solid 2px #aaa;
+            background: white;
+            border: solid 4px #aaa;
+            color: black;
             text-align: center;
             font-size: 8pt;
-            line-height: 46px;
+            line-height: 42px;
+            box-shadow: 0 0 2px white;
             -webkit-border-radius: 50%;
             -moz-border-radius: 50%;
             border-radius: 50%;
@@ -38,7 +53,7 @@
         }
 
         /* Notes list */
-        #pattern .pattern_item .notes {
+        .pattern_item .notes {
             position: absolute;
             text-align: center;
             width: 50px;
@@ -48,10 +63,10 @@
         }
 
         /* Lines between each pattern element */
-        #pattern .pattern_item:not(:last-of-type)::after,
-        #pattern .pattern_item:not(:first-of-type)::before,
-        #pattern .pattern_item:first-of-type::before,
-        #pattern .pattern_item:last-of-type::after
+        .pattern_item:not(:last-of-type)::after,
+        .pattern_item:not(:first-of-type)::before,
+        .pattern_item:first-of-type::before,
+        .pattern_item:last-of-type::after
         {
             content: "—";
             color: #ddd;
@@ -61,8 +76,8 @@
             top: -20px;
             position: relative;
         }
-        #pattern .pattern_item:first-of-type::before,
-        #pattern .pattern_item:last-of-type::after {
+        .pattern_item:first-of-type::before,
+        .pattern_item:last-of-type::after {
             content: "";
         }
 
@@ -70,9 +85,11 @@
             display: inline-block;
             position: relative;
             top: -18px;
-            width: 12px;
-            height: 12px;
-            background: #aaa;
+            width: 14px;
+            height: 14px;
+            background: #fff;
+            border: solid 2px black;
+            box-shadow: 0 0 2px white;
             -webkit-border-radius: 50%;
             -moz-border-radius: 50%;
             border-radius: 50%;
@@ -85,6 +102,7 @@
 
     <form action="#">
 
+        <!--
         <fieldset class="form-group">
             <div class="row">
                 <div class="col-sm-5">
@@ -98,23 +116,38 @@
                 </div>
             </div>
         </fieldset>
+        -->
 
         <fieldset class="form-group">
-            <p>Number of notes in your pattern:</p>
+            <p>Rhythm:</p>
 
             <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" id="pattern_notes_4" class="custom-control-input" name="pattern_notes" value="4">
-                <label class="custom-control-label" for="pattern_notes_4">4</label>
+                <input type="radio" id="rhythm_3" class="custom-control-input" name="rhythm" value="3">
+                <label class="custom-control-label" for="rhythm_3">3</label>
             </div>
 
             <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" id="pattern_notes_8" class="custom-control-input" name="pattern_notes" value="8">
-                <label class="custom-control-label" for="pattern_notes_8">8</label>
+                <input type="radio" id="rhythm_4" class="custom-control-input" name="rhythm" value="4">
+                <label class="custom-control-label" for="rhythm_4">4</label>
             </div>
 
             <div class="custom-control custom-radio custom-control-inline">
-                <input type="radio" id="pattern_notes_16" class="custom-control-input" name="pattern_notes" value="16">
-                <label class="custom-control-label" for="pattern_notes_16">16</label>
+                <input type="radio" id="rhythm_8" class="custom-control-input" name="rhythm" value="8">
+                <label class="custom-control-label" for="rhythm_8">8</label>
+            </div>
+
+        </fieldset>
+
+        <fieldset class="form-group">
+            <div class="row">
+                <div class="col-sm-5">
+                    <label for="pattern_bars">Number of bars/measures in your pattern:</label>
+                    <input type="range" id="pattern_bars" class="custom-range" min="1" max="8" step="1" value="2">
+                    <div>
+                        Current:
+                        <strong id="pattern_bars_result">2</strong>
+                    </div>
+                </div>
             </div>
         </fieldset>
 
@@ -136,13 +169,15 @@
 
     (function () {
 
-        /**
+        /*
          * Globals that are used in setup() & update()
          */
-        const handpan_notes_input = document.getElementById('handpan_notes');
-        const handpan_notes_result_element = document.getElementById('handpan_notes_result');
         const patterns_container = document.getElementById('pattern');
-        const number_of_notes_list = document.querySelectorAll('input[name="pattern_notes"]');
+        // const handpan_notes_input = document.getElementById('handpan_notes');
+        // const handpan_notes_result_element = document.getElementById('handpan_notes_result');
+        const number_of_bars_input = document.getElementById('pattern_bars');
+        const number_of_bars_result_element = document.getElementById('pattern_bars_result');
+        const rhythm_inputs = document.querySelectorAll('input[name="rhythm"]');
 
         // Reminder of the common chromatic scale in C:
         // C -> C♯ -> D♭ -> D -> D♯ -> E♭ -> E -> E♯/F♭ -> F -> F♯ -> G♭ -> G -> G♯ -> A♭ -> A -> A♯ -> B♭ -> B -> B♯/C♭ -> C
@@ -187,34 +222,53 @@
         };
 
         function setup() {
-            handpan_notes_result_element.value = 9;
-
-            number_of_notes_list[1].checked = true;
-            for (let pattern_note of number_of_notes_list) {
-                pattern_note.addEventListener('change', update);
-            }
-
             document.getElementById('regenerate_button').addEventListener('click', update);
 
-            handpan_notes_input.addEventListener('input', update);
+            // handpan_notes_result_element.value = 9;
+            // handpan_notes_input.addEventListener('input', update);
+
+            rhythm_inputs[1].checked = true;
+            rhythm_inputs.forEach((el) => el.addEventListener('change', update));
+
+            number_of_bars_input.value = '2';
+            number_of_bars_input.addEventListener('input', update);
         }
 
         /**
          * @param event Event
          */
         function update(event) {
-            const handpan_notes = handpan_notes_input.value;
-            const number_of_notes_in_pattern = getRadioButtonValue(number_of_notes_list);
+            // const handpan_notes = handpan_notes_input.value;
+            const number_of_bars = number_of_bars_input.value;
+            const rhythm = getRadioButtonValue(rhythm_inputs);
 
-            handpan_notes_result_element.innerText = handpan_notes;
+            // handpan_notes_result_element.innerText = handpan_notes;
+            number_of_bars_result_element.innerText = number_of_bars;
 
-            patterns_container.innerText = '';
+            patterns_container.setAttribute('data-rhythm', rhythm);
+            patterns_container.innerHTML = '';
 
-            for (let i = 0; i < number_of_notes_in_pattern; i++) {
-                let item = createPatternItem();
+            let left_switch = false;
 
-                patterns_container.appendChild(item);
-                if (i && (i + 1) % 4 === 0 && (i + 1) < number_of_notes_in_pattern) {
+            let number_of_notes = number_of_bars * rhythm;
+
+            for (let i = 0; i < number_of_notes; i++) {
+                // Choose a "hit" type randomly in the list
+                const handpan_hit = handpan_hits.randomElement();
+
+                let pattern_item = createPatternItem(handpan_hit);
+
+                patterns_container.appendChild(pattern_item);
+
+                // Alternate left/right
+                pattern_item.classList.add(left_switch ? 'hand-left' : 'hand-right');
+                pattern_item.classList.add(handpan_hit.type);
+                left_switch = !left_switch;
+
+                // Add a separator to keep pattern a suite of 4 elements
+                let needs_separator = i && (i + 1) % rhythm === 0 && (i + 1) < number_of_notes;
+
+                if (needs_separator) {
                     const pattern_item_separator = document.createElement('span');
                     pattern_item_separator.className = 'pattern_time_separator';
                     patterns_container.appendChild(pattern_item_separator);
@@ -222,12 +276,9 @@
             }
         }
 
-        function createPatternItem() {
+        function createPatternItem(handpan_hit) {
             const pattern_item = document.createElement('div');
             pattern_item.className = 'pattern_item';
-
-            // Choose a "hit" type randomly in the list
-            const handpan_hit = handpan_hits.randomElement();
 
             // Display handpan hit type
             const text_element = document.createElement('span');
