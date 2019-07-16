@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
     "incremental": true,
-    "target": "es6",
+    "target": "es5",
     "module": "none",
-    "outFile": "./build/app.js",
+    "noImplicitAny": false,
+    "outDir": "./build/",
     "strict": true
   }
 }
