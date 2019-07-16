@@ -184,7 +184,7 @@
 
         // Note: the "position" attribute is not used for now, but will be in the future when people will customize their handpan
 
-        const handpan_notes = [
+        const handpan_tune = [
             // <0 => low notes below the handpan
             // 0 => ding
             // 1 => lowest note on the top-part of the handpan
@@ -279,7 +279,7 @@
 
                 for (let i = 0; i < handpan_hit.needs_notes; i++) {
                     // Pick a random note
-                    const note = handpan_notes.randomElement();
+                    const note = handpan_tune.randomElement();
                     notes.push(note.note + note.alter + note.octave);
                 }
 
@@ -335,8 +335,8 @@
             return hitType !== null;
         }
 
-        Hit.prototype.getRandomValue = function() {
-            return this.handpan_hits.randomElement();
+        Hit.getRandomHit = function() {
+            return this.prototype.handpan_hits.randomElement();
         }
 
         setup();
