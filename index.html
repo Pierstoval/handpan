@@ -199,23 +199,6 @@
             {"note": "G", "alter": "#", "octave": 4, "position": 8},
         ];
 
-        const handpan_hits = [
-            {"type": 'ding',       "needs_notes": 0},
-            {"type": 'slam',       "needs_notes": 0},
-            {"type": 'left_slam',  "needs_notes": 0},
-            {"type": 'right_slam', "needs_notes": 0},
-            {"type": 'ghost',      "needs_notes": 0},
-            {"type": 'punch',      "needs_notes": 0},
-            {"type": 'any_note',   "needs_notes": 0},
-            {"type": 'note',       "needs_notes": 1},
-            {"type": 'double',     "needs_notes": 2}, // "power" chord
-            {"type": 'triple',     "needs_notes": 3}, // chord
-            {"type": 'staccato',   "needs_notes": 1}, // A note that you just "mute" with the side of the other hand
-            {"type": 'brush_up',   "needs_notes": 2}, // 2 Notes you chain really fast in the specified duration
-            {"type": 'brush_down', "needs_notes": 2}, // 2 Notes you chain really fast in the specified duration
-            {"type": 'harmonic',   "needs_notes": 1},
-        ];
-
         // Will help choose random elements from hits or notes
         Array.prototype.randomElement = function () {
             return this[Math.floor(Math.random() * this.length)]
@@ -254,7 +237,7 @@
 
             for (let i = 0; i < number_of_notes; i++) {
                 // Choose a "hit" type randomly in the list
-                const handpan_hit = handpan_hits.randomElement();
+                const handpan_hit = Hit.getRandomHit();
 
                 let pattern_item = createPatternItem(handpan_hit);
 
@@ -318,9 +301,48 @@
             return null;
         }
 
+        // Handpan hit constructor
+        function Hit(type, hand, notes) {
+            if (!isValidHitType(type)) {
+                throw 'Invalid type for handpan hit.';
+            }
+        }
+
+        Hit.prototype.handpan_hits = [
+            {"type": 'ding',       "needs_notes": 0},
+            {"type": 'slam',       "needs_notes": 0},
+            {"type": 'left_slam',  "needs_notes": 0},
+            {"type": 'right_slam', "needs_notes": 0},
+            {"type": 'ghost',      "needs_notes": 0},
+            {"type": 'punch',      "needs_notes": 0},
+            {"type": 'any_note',   "needs_notes": 0},
+            {"type": 'note',       "needs_notes": 1},
+            {"type": 'double',     "needs_notes": 2}, // "power" chord
+            {"type": 'triple',     "needs_notes": 3}, // chord
+            {"type": 'staccato',   "needs_notes": 1}, // A note that you just "mute" with the side of the other hand
+            {"type": 'brush_up',   "needs_notes": 2}, // 2 Notes you chain really fast in the specified duration
+            {"type": 'brush_down', "needs_notes": 2}, // 2 Notes you chain really fast in the specified duration
+            {"type": 'harmonic',   "needs_notes": 1},
+        ];
+
+        Hit.prototype.isValidHitType = function (type) {
+            let hits = this.handpan_hits;
+
+            let hitType = hits.filter(function(item) {
+                return item.type === type;
+            });
+
+            return hitType !== null;
+        }
+
+        Hit.prototype.getRandomValue = function() {
+            return this.handpan_hits.randomElement();
+        }
+
         setup();
         update();
 
+        window.Hit = Hit;
     })();
 
 </script>
