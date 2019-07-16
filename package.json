@@ -1,0 +1,21 @@
+{
+  "name": "@pierstoval/handpan",
+  "version": "0.1.0",
+  "description": "A small helper for handpan players",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pierstoval/handpan.git"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "Pierstoval",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Pierstoval/handpan/issues"
+  },
+  "homepage": "https://github.com/Pierstoval/handpan",
+  "dependencies": {
+    "typescript": "^3.5.3"
+  }
+}

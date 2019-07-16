@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "target": "es6",
+    "module": "none",
+    "outFile": "./build/app.js",
+    "strict": true
+  }
+}
