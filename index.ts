@@ -94,17 +94,16 @@ class App {
     }
 
     run() {
-
-        this.regenerate_button.addEventListener('click', this.update);
+        this.regenerate_button.addEventListener('click', () => this.update());
 
         // handpan_notes_result_element.value = 9;
         // handpan_notes_input.addEventListener('input', this.update);
 
         this.rhythm_input_to_enable.checked = true;
-        this.rhythm_inputs.forEach((el) => el.addEventListener('change', this.update));
+        this.rhythm_inputs.forEach((el) => el.addEventListener('change', () => this.update()));
 
         this.number_of_bars_input.value = '2';
-        this.number_of_bars_input.addEventListener('input', this.update);
+        this.number_of_bars_input.addEventListener('input', () => this.update());
 
         this.update();
     }
