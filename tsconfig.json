@@ -1,10 +1,17 @@
 {
-  "compilerOptions": {
-    "incremental": true,
-    "target": "es5",
-    "module": "none",
-    "noImplicitAny": false,
-    "outDir": "./build/",
-    "strict": true
-  }
+    "compilerOptions": {
+        "incremental": true,
+        "target": "es5",
+        "module": "none",
+        "noImplicitAny": false,
+        "outFile": "./build/index.js",
+        "strict": true
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
 }

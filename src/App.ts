@@ -1,50 +1,4 @@
 
-// Reminder of the common chromatic scale in C:
-// C -> C♯ -> D♭ -> D -> D♯ -> E♭ -> E -> E♯/F♭ -> F -> F♯ -> G♭ -> G -> G♯ -> A♭ -> A -> A♯ -> B♭ -> B -> B♯/C♭ -> C
-
-// Note: the "position" attribute is not used for now, but will be in the future when people will customize their handpan
-
-class HandpanHit {
-    private static readonly types = [
-        {"type": 'ding',       "needs_notes": 0},
-        {"type": 'slam',       "needs_notes": 0},
-        {"type": 'left_slam',  "needs_notes": 0},
-        {"type": 'right_slam', "needs_notes": 0},
-        {"type": 'ghost',      "needs_notes": 0},
-        {"type": 'punch',      "needs_notes": 0},
-        {"type": 'any_note',   "needs_notes": 0},
-        {"type": 'note',       "needs_notes": 1},
-        {"type": 'double',     "needs_notes": 2}, // "power" chord
-        {"type": 'triple',     "needs_notes": 3}, // chord
-        {"type": 'staccato',   "needs_notes": 1}, // A note that you just "mute" with the side of the other hand
-        {"type": 'brush_up',   "needs_notes": 2}, // 2 Notes you chain really fast in the specified duration
-        {"type": 'brush_down', "needs_notes": 2}, // 2 Notes you chain really fast in the specified duration
-        {"type": 'harmonic',   "needs_notes": 1},
-    ];
-
-    private readonly type: string;
-
-    constructor(type: string, hand, notes) {
-        if (!HandpanHit.isValidHitType(type)) {
-            throw 'Invalid hit type';
-        }
-
-        this.type = type;
-    }
-
-    private static isValidHitType(type: string) {
-        let hitType = this.types.filter(function(item) {
-            return item.type === type;
-        });
-
-        return hitType.length > 0;
-    };
-
-    public static getRandomHit() {
-        return this.types[Math.floor(Math.random() * this.types.length)];
-    };
-}
-
 class App {
     private readonly document: HTMLDocument;
     private readonly patterns_container: HTMLElement;
@@ -56,7 +10,7 @@ class App {
     private readonly regenerate_button: HTMLElement;
     private readonly rhythm_input_to_enable: HTMLInputElement;
 
-    handpan_tune = [
+    private readonly handpan_tune = [
         // <0 => low notes below the handpan
         // 0 => ding
         // 1 => lowest note on the top-part of the handpan
@@ -70,6 +24,8 @@ class App {
         {"note": "F", "alter": "#", "octave": 4, "position": 7},
         {"note": "G", "alter": "#", "octave": 4, "position": 8},
     ];
+
+    private _running: boolean = false;
 
     constructor(
         document: HTMLDocument,
@@ -94,6 +50,12 @@ class App {
     }
 
     run() {
+        if (this._running) {
+            throw 'Application is already running.';
+        }
+
+        this._running = true;
+
         this.regenerate_button.addEventListener('click', () => this.update());
 
         // handpan_notes_result_element.value = 9;
@@ -125,7 +87,7 @@ class App {
 
         for (let i = 0; i < number_of_notes; i++) {
             // Choose a "hit" type randomly in the list
-            const handpan_hit = HandpanHit.getRandomHit();
+            const handpan_hit = HitType.getRandomHitType();
 
             let pattern_item = this.createPatternItem(handpan_hit);
 

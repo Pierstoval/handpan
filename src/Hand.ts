@@ -1,0 +1,5 @@
+
+enum Hand {
+    left,
+    right,
+}

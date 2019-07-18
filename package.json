@@ -1,22 +1,22 @@
 {
-  "name": "@pierstoval/handpan",
-  "version": "0.1.0",
-  "description": "A small helper for handpan players",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Pierstoval/handpan.git"
-  },
-  "scripts": {
-    "build": "tsc index.ts --outDir build",
-    "watch": "tsc index.ts --outDir build --watch"
-  },
-  "author": "Pierstoval",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Pierstoval/handpan/issues"
-  },
-  "homepage": "https://github.com/Pierstoval/handpan",
-  "dependencies": {
-    "typescript": "^3.5.3"
-  }
+    "name": "@pierstoval/handpan",
+    "version": "0.1.0",
+    "description": "A small helper for handpan players",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Pierstoval/handpan.git"
+    },
+    "scripts": {
+        "build": "tsc",
+        "watch": "tsc --watch"
+    },
+    "author": "Pierstoval",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/Pierstoval/handpan/issues"
+    },
+    "homepage": "https://github.com/Pierstoval/handpan",
+    "dependencies": {
+        "typescript": "^3.5.3"
+    }
 }
