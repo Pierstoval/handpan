@@ -91,8 +91,6 @@ class App {
         this._patternRenderer.renderPattern(this._currentPattern);
 
         console.info('Pattern:', this._currentPattern);
-
-        this.window.localStorage._pattern = this._currentPattern;
     }
 
     private static getRadioButtonValue(radios_list) {

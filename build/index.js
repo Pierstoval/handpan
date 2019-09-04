@@ -47,7 +47,6 @@ var App = /** @class */ (function () {
         }
         this._patternRenderer.renderPattern(this._currentPattern);
         console.info('Pattern:', this._currentPattern);
-        this.window.localStorage._pattern = this._currentPattern;
     };
     App.getRadioButtonValue = function (radios_list) {
         for (var _i = 0, radios_list_1 = radios_list; _i < radios_list_1.length; _i++) {
