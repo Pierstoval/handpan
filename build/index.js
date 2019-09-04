@@ -22,7 +22,6 @@ var App = /** @class */ (function () {
             throw 'Application is already running.';
         }
         this._running = true;
-        this.activateHandpanTuner();
         this.regenerate_button.addEventListener('click', function () { return _this.refreshRandomPattern(); });
         // handpan_notes_result_element.value = 9;
         // handpan_notes_input.addEventListener('input', this.refreshRandomPattern);
@@ -56,18 +55,6 @@ var App = /** @class */ (function () {
             }
         }
         return null;
-    };
-    App.prototype.activateHandpanTuner = function () {
-        for (var position = 0; position <= 8; position++) {
-            this.createTunerInputs(position);
-        }
-    };
-    App.prototype.createTunerInputs = function (position) {
-        var input = this.document.createElement('input');
-        input.type = 'range';
-        input.id = 'tuner_position_' + position;
-        input.setAttribute('min', 'A');
-        input.setAttribute('max', 'G');
     };
     return App;
 }());

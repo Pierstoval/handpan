@@ -52,8 +52,6 @@ class App {
 
         this._running = true;
 
-        this.activateHandpanTuner();
-
         this.regenerate_button.addEventListener('click', () => this.refreshRandomPattern());
 
         // handpan_notes_result_element.value = 9;
@@ -101,22 +99,5 @@ class App {
         }
 
         return null;
-    }
-
-    private activateHandpanTuner(): void {
-        for (let position = 0; position <= 8; position++) {
-            this.createTunerInputs(position);
-        }
-    }
-
-    private createTunerInputs(position: number): void {
-        let input = this.document.createElement('input');
-        input.type = 'range';
-        input.id = 'tuner_position_'+position;
-        input.setAttribute('min', 'A');
-        input.setAttribute('max', 'G');
-
-
-
     }
 }
