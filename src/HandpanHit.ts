@@ -1,14 +1,17 @@
 
 class HandpanHit {
-    private readonly type: HitType;
-    private readonly hand: Hand;
+    public readonly hit_type: HitType;
+    public readonly hand: Hand;
 
-    private constructor(type: HitType, hand: Hand, notes) {
-        this.type = type;
+    private constructor(hit_type: HitType, hand: Hand, notes) {
+        this.hit_type = hit_type;
         this.hand = hand;
     }
 
-    public static createRandomHitType(): HandpanHit {
+    /**
+     * @param pattern to add logic instead of randomness when generating a pattern
+     */
+    public static createRandomHit(pattern: Pattern<HandpanHit>): HandpanHit {
         let random_boolean = Math.floor(Math.random() * 2);
         let hand = random_boolean ? Hand.left : Hand.right;
         let hit_type = HitType.getRandomHitType();

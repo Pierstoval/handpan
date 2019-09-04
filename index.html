@@ -169,11 +169,9 @@
 <script>
 
     (function () {
-
         const rhythm_inputs = document.querySelectorAll('input[name="rhythm"]');
-
-        const app = new App(
-            document,
+        (new App(
+            window,
             document.getElementById('pattern'),
             document.getElementById('handpan_notes'),
             document.getElementById('handpan_notes_result'),
@@ -182,9 +180,7 @@
             document.getElementById('regenerate_button'),
             rhythm_inputs,
             rhythm_inputs[1] || rhythm_inputs[0]
-        );
-
-        app.run();
+        )).run();
     })();
 
 </script>
