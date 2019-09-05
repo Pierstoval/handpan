@@ -3,7 +3,7 @@
         "incremental": true,
         "target": "es5",
         "module": "none",
-        "noImplicitAny": false,
+        "noImplicitAny": true,
         "outFile": "./build/index.js",
         "strict": true
     },

@@ -7,7 +7,7 @@ class PatternRenderer {
         this.container = container;
     }
 
-    public renderPattern(pattern: Pattern<HandpanHit>): void {
+    public renderPattern(pattern: Pattern): void {
         let number_of_notes = pattern.count;
 
         let i = 0;
@@ -34,7 +34,7 @@ class PatternRenderer {
         }
     }
 
-    private createPatternItem(pattern: Pattern<HandpanHit>, handpan_hit: HandpanHit): HTMLElement {
+    private createPatternItem(pattern: Pattern, handpan_hit: HandpanHit): HTMLElement {
         const pattern_item = document.createElement('div');
         pattern_item.className = 'pattern_item';
 

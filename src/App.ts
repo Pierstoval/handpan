@@ -15,7 +15,7 @@ class App {
 
     private _running: boolean = false;
 
-    private _currentPattern: Pattern<HandpanHit>;
+    private _currentPattern: Pattern;
     private _patternRenderer: PatternRenderer;
 
     constructor(
@@ -65,19 +65,17 @@ class App {
     }
 
     refreshRandomPattern(): void {
-        // const handpan_notes = handpan_notes_input.value;
         const number_of_bars = Number(this.number_of_bars_input.value);
-        const rhythm = App.getRadioButtonValue(this.rhythm_inputs);
+        const rhythm = parseInt(App.getRadioButtonValue(this.rhythm_inputs), 10);
 
-        // handpan_notes_result_element.innerText = handpan_notes;
         this.number_of_bars_result_element.innerText = String(number_of_bars);
 
-        this.patterns_container.setAttribute('data-rhythm', rhythm);
+        this.patterns_container.setAttribute('data-rhythm', rhythm.toString());
         this.patterns_container.innerHTML = '';
 
         let number_of_notes = number_of_bars * rhythm;
 
-        this._currentPattern = new Pattern<HandpanHit>(rhythm, this.handpan_tune);
+        this._currentPattern = new Pattern(rhythm, this.handpan_tune);
 
         for (let i = 0; i < number_of_notes; i++) {
             // Choose a "hit" type randomly in the list
@@ -91,13 +89,19 @@ class App {
         console.info('Pattern:', this._currentPattern);
     }
 
-    private static getRadioButtonValue(radios_list) {
-        for (let item of radios_list) {
-            if (item.checked) {
-                return item.value;
-            }
-        }
+    private static getRadioButtonValue(radios_list: NodeList): string {
+        let value = '';
 
-        return null;
+        radios_list.forEach(function (item: Node) {
+            if (!(item instanceof HTMLInputElement)) {
+                return;
+            }
+
+            if (item.checked) {
+                value = item.value;
+            }
+        });
+
+        return value;
     }
 }

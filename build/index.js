@@ -30,12 +30,10 @@ var App = /** @class */ (function () {
         this.refreshRandomPattern();
     };
     App.prototype.refreshRandomPattern = function () {
-        // const handpan_notes = handpan_notes_input.value;
         var number_of_bars = Number(this.number_of_bars_input.value);
-        var rhythm = App.getRadioButtonValue(this.rhythm_inputs);
-        // handpan_notes_result_element.innerText = handpan_notes;
+        var rhythm = parseInt(App.getRadioButtonValue(this.rhythm_inputs), 10);
         this.number_of_bars_result_element.innerText = String(number_of_bars);
-        this.patterns_container.setAttribute('data-rhythm', rhythm);
+        this.patterns_container.setAttribute('data-rhythm', rhythm.toString());
         this.patterns_container.innerHTML = '';
         var number_of_notes = number_of_bars * rhythm;
         this._currentPattern = new Pattern(rhythm, this.handpan_tune);
@@ -48,13 +46,16 @@ var App = /** @class */ (function () {
         console.info('Pattern:', this._currentPattern);
     };
     App.getRadioButtonValue = function (radios_list) {
-        for (var _i = 0, radios_list_1 = radios_list; _i < radios_list_1.length; _i++) {
-            var item = radios_list_1[_i];
-            if (item.checked) {
-                return item.value;
+        var value = '';
+        radios_list.forEach(function (item) {
+            if (!(item instanceof HTMLInputElement)) {
+                return;
             }
-        }
-        return null;
+            if (item.checked) {
+                value = item.value;
+            }
+        });
+        return value;
     };
     return App;
 }());
@@ -64,7 +65,7 @@ var Hand;
     Hand[Hand["right"] = 1] = "right";
 })(Hand || (Hand = {}));
 var HandpanHit = /** @class */ (function () {
-    function HandpanHit(hit_type, hand, notes) {
+    function HandpanHit(hit_type, hand) {
         this.hit_type = hit_type;
         this.hand = hand;
     }
@@ -75,7 +76,7 @@ var HandpanHit = /** @class */ (function () {
         var random_boolean = Math.floor(Math.random() * 2);
         var hand = random_boolean ? Hand.left : Hand.right;
         var hit_type = HitType.getRandomHitType();
-        return new HandpanHit(hit_type, hand, []);
+        return new HandpanHit(hit_type, hand);
     };
     return HandpanHit;
 }());

@@ -1,4 +1,4 @@
-class Pattern<HandpanHit> {
+class Pattern {
     private readonly _hits: Array<HandpanHit> = [];
     private readonly _handpan_tune: HandpanTune;
 

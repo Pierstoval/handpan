@@ -3,7 +3,7 @@ class HandpanHit {
     public readonly hit_type: HitType;
     public readonly hand: Hand;
 
-    private constructor(hit_type: HitType, hand: Hand, notes) {
+    private constructor(hit_type: HitType, hand: Hand) {
         this.hit_type = hit_type;
         this.hand = hand;
     }
@@ -11,11 +11,11 @@ class HandpanHit {
     /**
      * @param pattern to add logic instead of randomness when generating a pattern
      */
-    public static createRandomHit(pattern: Pattern<HandpanHit>): HandpanHit {
+    public static createRandomHit(pattern: Pattern): HandpanHit {
         let random_boolean = Math.floor(Math.random() * 2);
         let hand = random_boolean ? Hand.left : Hand.right;
         let hit_type = HitType.getRandomHitType();
 
-        return new HandpanHit(hit_type, hand, []);
+        return new HandpanHit(hit_type, hand);
     }
 }
