@@ -102,22 +102,6 @@
 
     <form action="#">
 
-        <!--
-        <fieldset class="form-group">
-            <div class="row">
-                <div class="col-sm-5">
-                    <label for="handpan_notes">Number of notes on your handpan (including the ding):</label>
-                    <input type="range" id="handpan_notes" class="custom-range" min="9" max="17" step="1" value="9">
-                    <div>
-                        Current:
-                        <strong id="handpan_notes_result">9</strong>
-                    </div>
-                    (this option is not used for now, but will be in the future)
-                </div>
-            </div>
-        </fieldset>
-        -->
-
         <fieldset class="form-group">
             <p>Rhythm:</p>
 
@@ -166,24 +150,7 @@
 <script src="assets/bootstrap.min.js"></script>
 <script src="build/index.js"></script>
 
-<script>
-
-    (function () {
-        const rhythm_inputs = document.querySelectorAll('input[name="rhythm"]');
-        (new App(
-            window,
-            document.getElementById('pattern'),
-            document.getElementById('handpan_notes'),
-            document.getElementById('handpan_notes_result'),
-            document.getElementById('pattern_bars'),
-            document.getElementById('pattern_bars_result'),
-            document.getElementById('regenerate_button'),
-            rhythm_inputs,
-            rhythm_inputs[1] || rhythm_inputs[0]
-        )).run();
-    })();
-
-</script>
+<script type="text/javascript">(new App()).run();</script>
 
 </body>
 </html>

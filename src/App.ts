@@ -3,8 +3,6 @@ class App {
     private readonly window: Window;
     private readonly document: HTMLDocument;
     private readonly patterns_container: HTMLElement;
-    private readonly handpan_notes_input: HTMLInputElement;
-    private readonly handpan_notes_result_element: HTMLElement;
     private readonly number_of_bars_input: HTMLInputElement;
     private readonly number_of_bars_result_element: HTMLElement;
     private readonly rhythm_inputs: NodeList;
@@ -18,27 +16,45 @@ class App {
     private _currentPattern: Pattern;
     private _patternRenderer: PatternRenderer;
 
-    constructor(
-        window: Window,
-        patterns_container: HTMLElement,
-        handpan_notes_input: HTMLInputElement,
-        handpan_notes_result_element: HTMLElement,
-        number_of_bars_input: HTMLInputElement,
-        number_of_bars_result_element: HTMLElement,
-        regenerate_button: HTMLElement,
-        rhythm_inputs: NodeList,
-        rhythm_input_to_enable: HTMLInputElement
-    ) {
-
+    constructor() {
         this.window = window;
         this.document = window.document;
+
+        const patterns_container = this.document.getElementById('pattern');
+        if (!(patterns_container instanceof HTMLElement)) {
+            throw App.invalidTypeMessage('patterns_container', 'HTMLElement', typeof patterns_container);
+        }
+
+        const number_of_bars_input = this.document.getElementById('pattern_bars');
+        if (!(number_of_bars_input instanceof HTMLInputElement)) {
+            throw App.invalidTypeMessage('number_of_bars_input', 'HTMLInputElement', typeof number_of_bars_input);
+        }
+
+        const number_of_bars_result_element = this.document.getElementById('pattern_bars_result');
+        if (!(number_of_bars_result_element instanceof HTMLElement)) {
+            throw App.invalidTypeMessage('number_of_bars_result_element', 'var_type', typeof number_of_bars_result_element);
+        }
+
+        const regenerate_button = this.document.getElementById('regenerate_button');
+        if (!(regenerate_button instanceof HTMLElement)) {
+            throw App.invalidTypeMessage('regenerate_button', 'HTMLElement', typeof regenerate_button);
+        }
+
+        const rhythm_inputs = this.document.querySelectorAll('input[name="rhythm"]');
+        if (!(rhythm_inputs instanceof NodeList)) {
+            throw App.invalidTypeMessage('rhythm_inputs', 'NodeList', typeof rhythm_inputs);
+        }
+
+        const rhythm_input_to_enable = rhythm_inputs[1] || rhythm_inputs[0];
+        if (!(rhythm_input_to_enable instanceof HTMLInputElement)) {
+            throw App.invalidTypeMessage('rhythm_input_to_enable', 'HTMLInputElement', typeof rhythm_input_to_enable);
+        }
+
         this.patterns_container = patterns_container;
-        this.handpan_notes_input = handpan_notes_input;
-        this.handpan_notes_result_element = handpan_notes_result_element;
         this.number_of_bars_input = number_of_bars_input;
         this.number_of_bars_result_element = number_of_bars_result_element;
-        this.rhythm_inputs = rhythm_inputs;
         this.regenerate_button = regenerate_button;
+        this.rhythm_inputs = rhythm_inputs;
         this.rhythm_input_to_enable = rhythm_input_to_enable;
 
         this._currentPattern = new Pattern(0, this.handpan_tune);
@@ -53,9 +69,6 @@ class App {
         this._running = true;
 
         this.regenerate_button.addEventListener('click', () => this.refreshRandomPattern());
-
-        // handpan_notes_result_element.value = 9;
-        // handpan_notes_input.addEventListener('input', this.refreshRandomPattern);
 
         this.rhythm_input_to_enable.checked = true;
 
@@ -103,5 +116,9 @@ class App {
         });
 
         return value;
+    }
+
+    private static invalidTypeMessage(var_name: string, type: string, current_type: string) {
+        return 'Variable '+var_name+' was expected to be a '+type+', '+current_type+' given';
     }
 }

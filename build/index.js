@@ -1,17 +1,39 @@
 "use strict";
 var App = /** @class */ (function () {
-    function App(window, patterns_container, handpan_notes_input, handpan_notes_result_element, number_of_bars_input, number_of_bars_result_element, regenerate_button, rhythm_inputs, rhythm_input_to_enable) {
+    function App() {
         this.handpan_tune = new HandpanTune();
         this._running = false;
         this.window = window;
         this.document = window.document;
+        var patterns_container = this.document.getElementById('pattern');
+        if (!(patterns_container instanceof HTMLElement)) {
+            throw App.invalidTypeMessage('patterns_container', 'HTMLElement', typeof patterns_container);
+        }
+        var number_of_bars_input = this.document.getElementById('pattern_bars');
+        if (!(number_of_bars_input instanceof HTMLInputElement)) {
+            throw App.invalidTypeMessage('number_of_bars_input', 'HTMLInputElement', typeof number_of_bars_input);
+        }
+        var number_of_bars_result_element = this.document.getElementById('pattern_bars_result');
+        if (!(number_of_bars_result_element instanceof HTMLElement)) {
+            throw App.invalidTypeMessage('number_of_bars_result_element', 'var_type', typeof number_of_bars_result_element);
+        }
+        var regenerate_button = this.document.getElementById('regenerate_button');
+        if (!(regenerate_button instanceof HTMLElement)) {
+            throw App.invalidTypeMessage('regenerate_button', 'HTMLElement', typeof regenerate_button);
+        }
+        var rhythm_inputs = this.document.querySelectorAll('input[name="rhythm"]');
+        if (!(rhythm_inputs instanceof NodeList)) {
+            throw App.invalidTypeMessage('rhythm_inputs', 'NodeList', typeof rhythm_inputs);
+        }
+        var rhythm_input_to_enable = rhythm_inputs[1] || rhythm_inputs[0];
+        if (!(rhythm_input_to_enable instanceof HTMLInputElement)) {
+            throw App.invalidTypeMessage('rhythm_input_to_enable', 'HTMLInputElement', typeof rhythm_input_to_enable);
+        }
         this.patterns_container = patterns_container;
-        this.handpan_notes_input = handpan_notes_input;
-        this.handpan_notes_result_element = handpan_notes_result_element;
         this.number_of_bars_input = number_of_bars_input;
         this.number_of_bars_result_element = number_of_bars_result_element;
-        this.rhythm_inputs = rhythm_inputs;
         this.regenerate_button = regenerate_button;
+        this.rhythm_inputs = rhythm_inputs;
         this.rhythm_input_to_enable = rhythm_input_to_enable;
         this._currentPattern = new Pattern(0, this.handpan_tune);
         this._patternRenderer = new PatternRenderer(this.document, this.patterns_container);
@@ -23,8 +45,6 @@ var App = /** @class */ (function () {
         }
         this._running = true;
         this.regenerate_button.addEventListener('click', function () { return _this.refreshRandomPattern(); });
-        // handpan_notes_result_element.value = 9;
-        // handpan_notes_input.addEventListener('input', this.refreshRandomPattern);
         this.rhythm_input_to_enable.checked = true;
         this.number_of_bars_input.value = '2';
         this.refreshRandomPattern();
@@ -56,6 +76,9 @@ var App = /** @class */ (function () {
             }
         });
         return value;
+    };
+    App.invalidTypeMessage = function (var_name, type, current_type) {
+        return 'Variable ' + var_name + ' was expected to be a ' + type + ', ' + current_type + ' given';
     };
     return App;
 }());
@@ -287,7 +310,7 @@ var PatternRenderer = /** @class */ (function () {
         var i = 0;
         for (var _i = 0, _a = pattern.hits; _i < _a.length; _i++) {
             var handpan_hit = _a[_i];
-            var pattern_item = this.createPatternItem(pattern, handpan_hit);
+            var pattern_item = PatternRenderer.createPatternItem(pattern, handpan_hit);
             this.container.appendChild(pattern_item);
             // Alternate left/right
             pattern_item.classList.add(handpan_hit.hand === Hand.left ? 'hand-left' : 'hand-right');
@@ -302,7 +325,7 @@ var PatternRenderer = /** @class */ (function () {
             i++;
         }
     };
-    PatternRenderer.prototype.createPatternItem = function (pattern, handpan_hit) {
+    PatternRenderer.createPatternItem = function (pattern, handpan_hit) {
         var pattern_item = document.createElement('div');
         pattern_item.className = 'pattern_item';
         // Display handpan hit type

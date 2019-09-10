@@ -13,7 +13,7 @@ class PatternRenderer {
         let i = 0;
 
         for (let handpan_hit of pattern.hits) {
-            let pattern_item = this.createPatternItem(pattern, handpan_hit);
+            let pattern_item = PatternRenderer.createPatternItem(pattern, handpan_hit);
 
             this.container.appendChild(pattern_item);
 
@@ -34,7 +34,7 @@ class PatternRenderer {
         }
     }
 
-    private createPatternItem(pattern: Pattern, handpan_hit: HandpanHit): HTMLElement {
+    private static createPatternItem(pattern: Pattern, handpan_hit: HandpanHit): HTMLElement {
         const pattern_item = document.createElement('div');
         pattern_item.className = 'pattern_item';
 
