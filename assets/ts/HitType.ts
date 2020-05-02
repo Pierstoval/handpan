@@ -1,19 +1,19 @@
 
 export default class HitType {
     public static readonly types = [
-        {"type": 'ding',       "needs_notes": 0},
+        {"type": 'ding',       "needs_notes": 1}, // Note required because handpan can have multiple dings.
         {"type": 'slam',       "needs_notes": 0},
         {"type": 'left_slam',  "needs_notes": 0},
         {"type": 'right_slam', "needs_notes": 0},
         {"type": 'ghost',      "needs_notes": 0},
         {"type": 'punch',      "needs_notes": 0},
-        {"type": 'any_note',   "needs_notes": 0},
+        {"type": 'any_note',   "needs_notes": 0}, // No note required, because, well, ANY would be enough. Not useful, but very used in generic patterns.
         {"type": 'note',       "needs_notes": 1},
         {"type": 'double',     "needs_notes": 2}, // "power" chord
-        {"type": 'triple',     "needs_notes": 3}, // chord
+        {"type": 'triple',     "needs_notes": 3}, // Chord
         {"type": 'staccato',   "needs_notes": 1}, // A note that you just "mute" with the side of the other hand
-        {"type": 'brush_up',   "needs_notes": 2}, // 2 Notes you chain really fast up
-        {"type": 'brush_down', "needs_notes": 2}, // 2 Notes you chain really fast down
+        {"type": 'brush_up',   "needs_notes": 2}, // Two Notes you chain really fast up
+        {"type": 'brush_down', "needs_notes": 2}, // Two Notes you chain really fast down
         {"type": 'harmonic',   "needs_notes": 1},
     ];
 
@@ -46,12 +46,6 @@ export default class HitType {
 
         throw 'Invalid hit type "'+name+'".';
     }
-
-    public static getRandomHitType(): HitType {
-        let random_type = this.types[Math.floor(Math.random() * this.types.length)];
-
-        return new HitType(random_type.type, random_type.needs_notes);
-    };
 
     private static isValidHitType(type: string): boolean {
         let hitType = this.types.filter(function(item) {

@@ -8,7 +8,7 @@ Encore
     // directory where compiled assets will be stored
     .setOutputPath('public/build/')
     .setPublicPath('/build')
-    .addEntry('app', './assets/js/app.ts')
+    .addEntry('app', './assets/app.ts')
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
 

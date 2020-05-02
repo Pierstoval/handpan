@@ -1,3 +1,6 @@
+import {Note} from "./Note";
+import {NoteAlteration} from "./NoteAlteration";
+
 export default class MusicNote {
     private readonly _note: Note;
     private readonly _alteration: NoteAlteration;

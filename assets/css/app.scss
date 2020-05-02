@@ -1,0 +1,37 @@
+body {
+    background-color: #333;
+    color: #ddd;
+}
+
+$handpanNoteWidth: 100px;
+$handpanDingRatio: 1.3;
+
+#app_handpan_tune {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    margin: 10px auto 0 auto;
+    display: block;
+    border: solid 1px #ddd;
+    border-radius: 50%;
+
+    .handpan_note {
+        width: $handpanNoteWidth;
+        height: $handpanNoteWidth;
+        line-height: $handpanNoteWidth;
+        margin: - $handpanNoteWidth / 2;
+
+        display: inline-block;
+        text-align: center;
+        border: solid 1px black;
+        border-radius: 50%;
+        position: absolute;
+        top: 50%; left: 50%;
+        &.ding {
+            width: $handpanNoteWidth / $handpanDingRatio;
+            height: $handpanNoteWidth / $handpanDingRatio;
+            line-height: $handpanNoteWidth / $handpanDingRatio;
+            margin: -$handpanNoteWidth / $handpanDingRatio / 2
+        }
+    }
+}

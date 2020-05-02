@@ -1,15 +1,22 @@
 import MusicNote from "./MusicNote";
+import HandpanTuneRenderer from "./HandpanTuneRenderer";
+import {Note} from "./Note";
+import {NoteAlteration} from "./NoteAlteration";
 
 export default class HandpanTune {
-    private readonly _tune: Array<MusicNote>;
+    private readonly _notes: Array<MusicNote>;
 
-    constructor() {
+    private renderer: HandpanTuneRenderer;
+
+    constructor(renderer: HandpanTuneRenderer) {
+        this.renderer = renderer;
+
         // position <0 => low notes below the handpan
         // position 0 => ding
         // position 1 => lowest note on the top-part of the handpan
 
         // TODO: make this configurable by the end user
-        this._tune = [
+        this._notes = [
             new MusicNote(Note.C, NoteAlteration.sharp, 3, 0),
             new MusicNote(Note.G, NoteAlteration.none, 3, 1),
             new MusicNote(Note.A, NoteAlteration.none, 4, 2),
@@ -22,12 +29,12 @@ export default class HandpanTune {
         ];
     }
 
-    get tune(): Array<MusicNote> {
-        return this._tune;
+    get notes(): Array<MusicNote> {
+        return this._notes;
     }
 
     public getNoteByPosition(position: number): MusicNote | null {
-        for (let note of this._tune) {
+        for (let note of this._notes) {
             if (note.position === position) {
                 return note;
             }
@@ -36,7 +43,19 @@ export default class HandpanTune {
         return null;
     }
 
-    public getRandomNote(): MusicNote {
-        return this._tune[Math.floor(Math.random() * this._tune.length)]
+    public render(): void {
+        this.renderer.render(this);
+    }
+
+    numberOfDings(): number {
+        let numberOfDings = 0;
+
+        for (const note of this._notes) {
+            if (note.position <= 0) {
+                numberOfDings++;
+            }
+        }
+
+        return numberOfDings;
     }
 }

@@ -1,36 +1,33 @@
-import Renderer from "./Renderer";
+
+import AppDisplay from "./AppDisplay";
+import HandpanTune from "./HandpanTune";
+import HandpanTuneRenderer from "./HandpanTuneRenderer";
 
 export default class App {
     private readonly window: Window;
     private readonly document: HTMLDocument;
+    private readonly containerName: string;
+    private display: AppDisplay|null = null;
+    private handpan_tune: HandpanTune;
 
-    private _running: boolean = false;
-
-    private container: HTMLElement;
-    private renderer: Renderer;
-
-    constructor(containerName: string) {
+    constructor(containerName: string, window: Window) {
+        this.containerName = containerName;
         this.window = window;
         this.document = window.document;
-        let container = document.getElementById(containerName);
+
+        let container = this.document.getElementById(this.containerName);
+
         if (!container) {
             throw new Error(`Container "${container}" does not exist in the DOM.`);
         }
-        this.container = container;
-        this.renderer = new Renderer();
+
+        this.display = new AppDisplay(this.document, container);
+        this.handpan_tune = new HandpanTune(new HandpanTuneRenderer(this.document, this.display.handpan_tune));
+
+        this.render();
     }
 
-    run(): void {
-        if (this._running) {
-            throw 'Application is already running.';
-        }
-        this._running = true;
-
-        this.showInputs();
-    }
-
-    private showInputs(): void {
-
-        this.renderer.render();
+    private render() {
+        this.handpan_tune.render();
     }
 }
