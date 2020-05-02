@@ -1,4 +1,7 @@
-class PatternRenderer {
+import Pattern from "./Pattern";
+import HandpanHit from "./HandpanHit";
+
+export default class PatternRenderer {
     private document: HTMLDocument;
     private container: HTMLElement;
 

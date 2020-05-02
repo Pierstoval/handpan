@@ -1,4 +1,4 @@
-class MusicNote {
+export default class MusicNote {
     private readonly _note: Note;
     private readonly _alteration: NoteAlteration;
     private readonly _octave: number;

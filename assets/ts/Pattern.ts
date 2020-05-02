@@ -1,4 +1,7 @@
-class Pattern {
+import HandpanHit from "./HandpanHit";
+import HandpanTune from "./HandpanTune";
+
+export default class Pattern {
     private readonly _hits: Array<HandpanHit> = [];
     private readonly _handpan_tune: HandpanTune;
 

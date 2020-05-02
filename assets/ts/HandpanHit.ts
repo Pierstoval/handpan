@@ -1,5 +1,7 @@
+import HitType from "./HitType";
+import Pattern from "./Pattern";
 
-class HandpanHit {
+export default class HandpanHit {
     public readonly hit_type: HitType;
     public readonly hand: Hand;
 

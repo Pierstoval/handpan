@@ -1,5 +1,5 @@
 
-class HitType {
+export default class HitType {
     public static readonly types = [
         {"type": 'ding',       "needs_notes": 0},
         {"type": 'slam',       "needs_notes": 0},

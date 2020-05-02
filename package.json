@@ -1,22 +1,22 @@
 {
-    "name": "@pierstoval/handpan",
-    "version": "0.1.0",
-    "description": "A small helper for handpan players",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Pierstoval/handpan.git"
+    "devDependencies": {
+        "@fortawesome/fontawesome-free": "^5.13.0",
+        "@symfony/webpack-encore": "^0.29.1",
+        "core-js": "^3.6.5",
+        "regenerator-runtime": "^0.13.5",
+        "webpack-notifier": "^1.8.0",
+        "jquery": "^3.5.0",
+        "node-sass": "^4.14.0",
+        "sass-loader": "^7.3.1",
+        "ts-loader": "^5.4.5",
+        "typescript": "^3.8.3"
     },
+    "license": "AGPL-3.0-only",
+    "private": true,
     "scripts": {
-        "build": "tsc",
-        "watch": "tsc --watch"
-    },
-    "author": "Pierstoval",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/Pierstoval/handpan/issues"
-    },
-    "homepage": "https://github.com/Pierstoval/handpan",
-    "dependencies": {
-        "typescript": "^3.5.3"
+        "dev-server": "encore dev-server",
+        "dev": "encore dev",
+        "watch": "encore dev --watch",
+        "build": "encore production --progress"
     }
 }

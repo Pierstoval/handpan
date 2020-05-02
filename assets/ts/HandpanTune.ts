@@ -1,4 +1,6 @@
-class HandpanTune {
+import MusicNote from "./MusicNote";
+
+export default class HandpanTune {
     private readonly _tune: Array<MusicNote>;
 
     constructor() {
