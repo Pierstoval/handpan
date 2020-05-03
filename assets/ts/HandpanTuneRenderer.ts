@@ -104,7 +104,7 @@ export default class HandpanTuneRenderer {
         el.style.backgroundColor = `hsl(${colorHue}, 10%, ${Math.floor(30 + 20 * notesCounter / numberOfNotes)}%)`;
         el.style.height = size + 'px';
         el.style.lineHeight = size + 'px';
-        el.style.margin = '-' + (size / 2) + 'px';
+        el.style.margin = (-4 - (size / 2)) + 'px';
         el.style.width = size + 'px';
     }
 
