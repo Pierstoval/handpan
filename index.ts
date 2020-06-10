@@ -1,4 +1,4 @@
-import { Application, MiddlewareFunc, HandlerFunc } from "https://deno.land/x/abc@v1.0.0-rc10/mod.ts";
+import { Application } from "https://deno.land/x/abc@v1.0.0-rc10/mod.ts";
 import { renderFile } from "https://deno.land/x/dejs/mod.ts";
 
 const PORT = 8000;
@@ -14,17 +14,18 @@ app.renderer = {
 };
 
 app
-    .use(function(next: HandlerFunc): HandlerFunc{
-        console.info('Request incoming!', arguments);
-        console.info('arguments[0]', arguments[0]);
-        console.info('arguments[1]', arguments[1]);
-        return next;
+    .use((next) => (c) => {
+        console.log(`${c.request.proto} ${c.request.method} ${c.path}`);
+        return next(c);
     })
-    .get("/", async (c) => {
-        await c.render('./assets/index.html');
-    })
-    .static('/assets', './assets')
     .static('/build', './build')
+    .static('/js', './public/js')
+    .static('/css', './public/css')
+    .static('/vendor', './public/vendor')
+    .get("/", async (c) => {
+        console.log(`Resolved index.`);
+        await c.render('./public/index.html');
+    })
     .start({
         port: PORT
     })

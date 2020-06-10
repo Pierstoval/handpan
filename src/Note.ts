@@ -1,4 +1,4 @@
-enum Note {
+export enum Note {
     A = 'A',
     B = 'B',
     C = 'C',
