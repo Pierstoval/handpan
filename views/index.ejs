@@ -1,0 +1,44 @@
+
+<form action="#">
+
+    <fieldset class="form-group">
+        <p>Rhythm:</p>
+
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="rhythm_3" class="custom-control-input" name="rhythm" value="3">
+            <label class="custom-control-label" for="rhythm_3">3</label>
+        </div>
+
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="rhythm_4" class="custom-control-input" name="rhythm" value="4">
+            <label class="custom-control-label" for="rhythm_4">4</label>
+        </div>
+
+        <div class="custom-control custom-radio custom-control-inline">
+            <input type="radio" id="rhythm_8" class="custom-control-input" name="rhythm" value="8">
+            <label class="custom-control-label" for="rhythm_8">8</label>
+        </div>
+
+    </fieldset>
+
+    <fieldset class="form-group">
+        <div class="row">
+            <div class="col-sm-5">
+                <label for="pattern_bars">Number of bars/measures in your pattern:</label>
+                <input type="range" id="pattern_bars" class="custom-range" min="1" max="8" step="1" value="2">
+                <div>
+                    Current:
+                    <strong id="pattern_bars_result">2</strong>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+    <fieldset class="form-group">
+        <button type="button" id="regenerate_button" class="btn btn-primary">
+            Regenerate
+        </button>
+    </fieldset>
+</form>
+
+<div id="pattern"></div>
